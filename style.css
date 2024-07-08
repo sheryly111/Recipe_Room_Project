@@ -1,0 +1,26 @@
+.navbar-brand{
+    padding-left: 1%;
+}
+
+/*Options*/
+.filter-container{
+    padding: 2%;
+}
+.filter-desc{
+    text-align: center;
+}
+.options{
+    display:flex;
+    text-align:center;
+    padding: 10px;
+}
+.option-form{
+    flex: 1;
+    flex-direction:column;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.filter-submission{
+    text-align: center;
+}
