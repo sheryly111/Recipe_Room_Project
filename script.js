@@ -1,3 +1,11 @@
+/* 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+    1. Shorten and make code more compact
+    2. Make it so that not every field has to be filled in order for filter to work 
+    3. CHECKS if there are any recipes at all 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+*/
+
 /* ------------ HELPER FUNCTIONS ------------ */
 //Generate a Random Int. 
 const getRandomInt = (max) => {
@@ -10,7 +18,6 @@ const allergies_input = document.querySelector('#allergies-input');
 const diet_input = document.querySelector('#diet-input');
 const ingredients_input = document.querySelector('#ingredients-input');
 
-// !!! Shorten and make code more compact? !!! 
 //Get the information from the forms 
 cuisine_input.addEventListener("change", (e) => {
     let cuisine_result = event.target.value.toLowerCase();
@@ -55,4 +62,49 @@ submitButton.addEventListener("click", async (e) => {
     const filtered_response = await fetch(filtered_recipe);
     const filtered_json = await filtered_response.json(); 
     console.log(filtered_json); 
+
+    /* ------------ DISPLAYING RESULT ------------ */
+    // Brief Description: 
+    // Title, Description, Photo, Diets, readyInMinutes, Servings 
+    // A button to generate the instructions and ingredients 
+    // A button to generate a new reciepe instead 
+
+    //Gather the info. needed for the brief description
+    let recipe_name = filtered_json.title; 
+    let recipe_description = filtered_json.summary;
+    let recipe_photo = filtered_json.image; 
+    let recipe_diets_raw = filtered_json.diets;
+    let recipe_time = filtered_json.readyInMinutes; 
+    let recipe_servings = filtered_json.servings; 
+
+    //Cleaning up data 
+    //Diets: 
+    let recipe_diets = "";
+    for (i = 0 ; i < recipe_diets_raw.length-1; i ++){
+        recipe_diets += recipe_diets_raw[i] + ", "; 
+    }
+    recipe_diets += recipe_diets_raw[recipe_diets_raw.length-1]
+
+    //Inner HTML to Display Info. 
+    let filter_result = document.querySelector('#filter-result');
+    filter_result.innerHTML = 
+    `
+    <div class = "container">
+        <div class = "row">
+            <div class = "brief-description col"> 
+                <h2> ${recipe_name} </h2> 
+                <h3> Diets: ${recipe_diets} </h3> 
+                <h3> Time: ${recipe_time} minutes </h3> 
+                <h3> Servings: ${recipe_servings} </h3> 
+            </div>
+            <div class = "recipe-photo col">
+                <img src = ${recipe_photo}>
+            </div>
+        </div>
+    </div>
+    <div class = "recipe-description">
+        <p> ${recipe_description} </p> 
+    </div> 
+    `
+
 });
