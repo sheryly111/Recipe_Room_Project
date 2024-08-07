@@ -20,7 +20,32 @@
     margin-left: 2%;
     margin-right: 2%;
 }
-
+.option-form input{
+    width: 75%;
+}
 .filter-submission{
     text-align: center;
 }
+
+/*Filter Results*/ 
+.filter-result{
+    margin-top: 2%; 
+    padding: 2%;
+}
+
+.recipe-photo{ 
+    text-align: center;
+}
+
+.filter-container h3, h4{
+    font-family: "Alegreya SC", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.filter-container p, h5{
+    font-family: "Merriweather", serif;
+    font-weight: 300;
+    font-style: normal;
+}
+

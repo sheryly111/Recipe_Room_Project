@@ -1,10 +1,9 @@
 /* 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
     1. Shorten and make code more compact
-    2. Make it so that not every field has to be filled in order for filter to work 
-        - Perhaps with if else statements? 
-    3. CHECKS if there are any recipes at all 
-        - Check if the length of the json result is less than 1 
+    2. <DONE> Make it so that not every field has to be filled in order for filter to work 
+        - Perhaps with if else statements? <Make the variables holding the fields to be lists> 
+    3. <DONE> If there are no results, make it display something that indicates it 
     4. When you press the submit button, you should clear the results (incase your new recipe doesn't exist)
         - innerHTML = " " 
         - cuisine.value = " " to reset the values of the fields
@@ -12,6 +11,7 @@
     5. Make sure it supports multiple options in the search fields 
     6. Reformat the results 
     7. MAKE IT PRETTIER ITS SO UGLY BYE
+    8. Convert the time to hours and minutes 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
 */
 
@@ -27,26 +27,32 @@ const allergies_input = document.querySelector('#allergies-input');
 const diet_input = document.querySelector('#diet-input');
 const ingredients_input = document.querySelector('#ingredients-input');
 
+let cuisine = []; 
+let allergies = []; 
+let diet = []; 
+let ingredients = [];
+
 //Get the information from the forms 
 cuisine_input.addEventListener("change", (e) => {
-    let cuisine_result = event.target.value.toLowerCase();
+    const cuisine_result = event.target.value.toLowerCase();
     cuisine = cuisine_result;
 });
 
 allergies_input.addEventListener("change", (e) => {
-    let allergies_result = event.target.value.toLowerCase();
+    const allergies_result = event.target.value.toLowerCase();
     allergies = allergies_result;
 });
 
 diet_input.addEventListener("change", (e) => {
-    let diet_result = event.target.value.toLowerCase();
+    const diet_result = event.target.value.toLowerCase();
     diet = diet_result;
 });
 
 ingredients_input.addEventListener("change", (e) => {
-    let ingredients_result = event.target.value.toLowerCase();
+    const ingredients_result = event.target.value.toLowerCase();
     ingredients = ingredients_result;
 });
+
 
 /* ------------ SUBMISSION BUTTON ------------ */
 submitButton.addEventListener("click", async (e) => {
@@ -65,7 +71,7 @@ submitButton.addEventListener("click", async (e) => {
     /* ------------ CHECK IF A RESULT EXISTS ------------ */
     let filter_result = document.querySelector('#filter-result');
     if (all_json.results.length == 0){
-        filter_result.innerHTML = `<h3> Sorry we couldn't find a recipe for you`;
+        filter_result.innerHTML = `<h3> Sorry we couldn't find a recipe for you </h3>`;
     }else{
 
         /* ------------ FILTERING PROCESS ------------ */
@@ -91,7 +97,7 @@ submitButton.addEventListener("click", async (e) => {
         let recipe_instructions_raw = filtered_json.analyzedInstructions[0].steps; 
 
         //Cleaning up data 
-        //Diets: 
+        //Diets
         let recipe_diets = "";
         for (i = 0 ; i < recipe_diets_raw.length-1; i ++){
             recipe_diets += recipe_diets_raw[i] + ", "; 
@@ -114,7 +120,7 @@ submitButton.addEventListener("click", async (e) => {
         //Inner HTML to Display Info. 
         filter_result.innerHTML = 
         `
-        <div class = "container">
+        <div class = "results-top">
             <div class = "row">
                 <div class = "brief-description col"> 
                     <h2> ${recipe_name} </h2> 
