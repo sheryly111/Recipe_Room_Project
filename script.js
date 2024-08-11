@@ -4,14 +4,14 @@
     2. <DONE> Make it so that not every field has to be filled in order for filter to work 
         - Perhaps with if else statements? <Make the variables holding the fields to be lists> 
     3. <DONE> If there are no results, make it display something that indicates it 
-    4. When you press the submit button, you should clear the results (incase your new recipe doesn't exist)
+    4. <DONE> When you press the submit button, you should clear the results (incase your new recipe doesn't exist)
         - innerHTML = " " 
         - cuisine.value = " " to reset the values of the fields
         - get the input fields' ID's to ___.innerHTML = " " to show the empty fields  
-    5. Make sure it supports multiple options in the search fields 
+        - add a clear button, it will clear the lists for the fields if pressed, otherwise, the user can update their preferences by just manipulating their answers
+    5. <DONE> Make sure it supports multiple options in the search fields 
     6. Reformat the results 
-    7. MAKE IT PRETTIER ITS SO UGLY BYE
-    8. Convert the time to hours and minutes 
+    7. <DONE> Convert the time to hours and minutes 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
 */
 
@@ -20,6 +20,7 @@
 const getRandomInt = (max) => {
     return Math.floor(Math.random() * Math.floor(max));
   };
+/* ------------ END OF HELPER FUNCTIONS ------------ */
 
 /* ------------ FORM QUERYING ------------ */
 const cuisine_input = document.querySelector('#cuisine-input');
@@ -52,7 +53,7 @@ ingredients_input.addEventListener("change", (e) => {
     const ingredients_result = event.target.value.toLowerCase();
     ingredients = ingredients_result;
 });
-
+/* ------------ END OF FORM QUERYING ------------ */
 
 /* ------------ SUBMISSION BUTTON ------------ */
 submitButton.addEventListener("click", async (e) => {
@@ -67,6 +68,7 @@ submitButton.addEventListener("click", async (e) => {
     const all_response = await fetch(query);
     const all_json = await all_response.json();
     console.log(all_json);
+    /* ------------ END OF API FETCHING ------------ */
 
     /* ------------ CHECK IF A RESULT EXISTS ------------ */
     let filter_result = document.querySelector('#filter-result');
@@ -83,6 +85,7 @@ submitButton.addEventListener("click", async (e) => {
         const filtered_response = await fetch(filtered_recipe);
         const filtered_json = await filtered_response.json(); 
         console.log(filtered_json); 
+        /* ------------ END OF FILTERING PROCESS ------------ */
 
         /* ------------ DISPLAYING RESULT ------------ */
 
@@ -91,7 +94,7 @@ submitButton.addEventListener("click", async (e) => {
         let recipe_description = filtered_json.summary;
         let recipe_photo = filtered_json.image; 
         let recipe_diets_raw = filtered_json.diets;
-        let recipe_time = filtered_json.readyInMinutes; 
+        let recipe_time_raw = filtered_json.readyInMinutes; 
         let recipe_servings = filtered_json.servings; 
         let recipe_ingredients_raw = filtered_json.extendedIngredients; 
         let recipe_instructions_raw = filtered_json.analyzedInstructions[0].steps; 
@@ -116,6 +119,15 @@ submitButton.addEventListener("click", async (e) => {
             recipe_instructions += `<li> ${recipe_instructions_raw[i].step} </li>`
         };
 
+        //Time 
+        let recipe_time = 0; 
+        if (recipe_time_raw < 60){
+            recipe_time = `${recipe_time_raw} minutes`; 
+        }else{
+            let hours = Math.floor(recipe_time_raw / 60)
+            recipe_time = `${hours} hours and ${recipe_time_raw - (hours * 60)} minutes`
+        }
+
 
         //Inner HTML to Display Info. 
         filter_result.innerHTML = 
@@ -125,7 +137,7 @@ submitButton.addEventListener("click", async (e) => {
                 <div class = "brief-description col"> 
                     <h2> ${recipe_name} </h2> 
                     <h3> Diets: ${recipe_diets} </h3> 
-                    <h3> Time: ${recipe_time} minutes </h3> 
+                    <h3> Time: ${recipe_time} </h3> 
                     <h3> Servings: ${recipe_servings} </h3> 
                     <p> ${recipe_description} </p> 
                 </div>
@@ -148,4 +160,21 @@ submitButton.addEventListener("click", async (e) => {
         </div> 
         `
     }
+    /* ------------ END OF DISPLAYING RESULTS ------------ */
 });
+/* ------------ END OF SUBMISSION BUTTON ------------ */
+
+/* ------------ CLEAR BUTTON ------------ */
+clearButton.addEventListener("click", async (e) => {
+    cuisine = [];
+    allergies = []; 
+    diet = []; 
+    ingredients = []; 
+
+    cuisine_input.value = "";
+    allergies_input.value = "";
+    diet_input.value = "";
+    ingredients_input.value = "";
+
+});
+/* ------------ END OF CLEAR BUTTON ------------ */
